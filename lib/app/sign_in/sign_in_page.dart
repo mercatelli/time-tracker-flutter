@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/sign_in_buttom.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/social_sign_in_buttom.dart';
-import 'package:time_tracker_flutter_course/common_widgets/custom_raised_buttom.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:time_tracker_flutter_course/services/auth.dart';
 
 class SignInPage extends StatelessWidget {
-  SignInPage({@required this.onSignIn});
-  final Function(FirebaseUser) onSignIn;
+  SignInPage({@required this.auth});
+  final AuthBase auth;
 
   Future<void> _signInAnonymously() async {
-    final AuthResult authResult = await FirebaseAuth.instance.signInAnonymously();
-    onSignIn(authResult.user);
+    try {
+      User user = await auth.signInAnonymously();
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('Time Tracker')),
+        title: Text('Time Tracker'),
         elevation: 2.0,
       ),
       body: _buildContent(),
